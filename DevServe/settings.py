@@ -86,7 +86,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'devserve',
         'USER': 'root',
-        'PASSWORD': 'l7router',
+        'PASSWORD': 'default_password',
         'HOST': '10.10.110.8',
         'PORT': '3306',
         },
