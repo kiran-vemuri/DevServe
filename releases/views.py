@@ -4,6 +4,11 @@ from .models import Product, Component, Binary
 
 
 def product_index(request):
+    """
+    method to fetch list of available products and display them on the webpage
+    :param request:
+    :return:
+    """
     product_list = Product.objects.order_by('name')
     context = {
         'product_list': product_list
@@ -12,6 +17,12 @@ def product_index(request):
 
 
 def component_index(request, product_id):
+    """
+    method to fetch list of available components for the given product and display them on the web page
+    :param request:
+    :param product_id:
+    :return:
+    """
     component_list = get_list_or_404(Component, product_id=product_id)
     context = {
         'component_list': component_list,
