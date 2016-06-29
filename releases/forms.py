@@ -1,6 +1,5 @@
 from django import forms
 
 
-class ReleaseUploadForm(forms.Form):
-    name = forms.CharField(max_length=200)
-    file = forms.FileField()
+class BinaryUploadForm(forms.Form):
+    binary = forms.FileField(label="Select a file to upload")

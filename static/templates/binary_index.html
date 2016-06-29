@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+    {% if binary_list %}
+        <ul>
+        {% for binary in binary_list %}
+            <li><a href="#">{{ binary.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No binaries available for component: <b>{{ component_object.name }}</b>.</p>
+    {% endif %}
+
+{% endblock %}

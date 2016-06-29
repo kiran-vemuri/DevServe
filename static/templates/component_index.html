@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block body %}
-{% if component_list %}
-    <ul>
-    {% for component in component_list %}
-        <li><a href="/releases/{{ component.id }}/">{{ component.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No products available.</p>
-{% endif %}
+    {% if component_list %}
+        <ul>
+        {% for component in component_list %}
+            <li><a href="/releases/{{ product_object.id }}/{{ component.id }}/">{{ component.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No components available for product: <b>{{ product_object.name }}</b></p>
+    {% endif %}
 {% endblock %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_list_or_404
+from django.shortcuts import render
 import json
 from .models import Product, Component, Binary
 
@@ -23,11 +23,24 @@ def component_index(request, product_id):
     :param product_id:
     :return:
     """
-    component_list = get_list_or_404(Component, product_id=product_id)
+    component_list = Component.objects.filter(product_id=product_id)
+    product_object = Product.objects.get(id=product_id)
     context = {
         'component_list': component_list,
+        'product_object': product_object,
     }
     return render(request, 'component_index.html', context)
+
+
+def binary_index(request, product_id, component_id):
+    binary_list = Binary.objects.filter(component_id=component_id)
+    component_object = Component.objects.get(id=component_id)
+    context = {
+        'binary_list': binary_list,
+        'product_id': product_id,
+        'component_object': component_object,
+    }
+    return render(request, 'binary_index.html', context)
 
 
 def sample_index(request):

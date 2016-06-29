@@ -35,9 +35,9 @@ class Binary(models.Model):
     id = models.AutoField(primary_key=True)
     component = models.ForeignKey(Component, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=300, blank=False)
-    path = models.CharField(max_length=500, blank=False, default=os.path.abspath('/tmp/'))
+    path = models.FileField(upload_to='binaries/%Y/%m/%d')
     notes = models.CharField(max_length=2000, blank=False, default="*No Notes Provided*")
-    status = models.CharField(max_length=20, blank=False)
+    status = models.CharField(max_length=20, blank=False, default="New")
     upload_date = models.DateTimeField(auto_now_add=True)
     status_change_date = models.DateTimeField(auto_now=True)
 
