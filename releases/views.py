@@ -1,6 +1,9 @@
 from django.shortcuts import render
-import json
+from django.http import HttpResponseRedirect
+from django.conf import settings
+import json, os
 from .models import Product, Component, Binary
+from .forms import UploadFileForm
 
 
 def product_index(request):
@@ -41,6 +44,33 @@ def binary_index(request, product_id, component_id):
         'component_object': component_object,
     }
     return render(request, 'binary_index.html', context)
+
+
+def binary_upload(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            component_object = Component.objects.get(id=form.data['component'])
+            product_object = Product.objects.get(id=component_object.product_id)
+            binary_path = product_object.path + component_object.path
+            binary_object = Binary.objects.create(name='test', component_id=form.data['component'], path=binary_path)
+            handle_uploaded_file(request.FILES['file'], binary_path)
+            return HttpResponseRedirect('/success/url/')
+    else:
+        form = UploadFileForm()
+    return render(request, 'binary_upload.html', {'form': form})
+
+
+def handle_uploaded_file(in_file, binary_path):
+    print binary_path
+    if not os.path.exists(os.path.abspath(binary_path)):
+        try:
+            os.makedirs(os.path.dirname(binary_path))
+        except OSError as exc:
+            raise
+    with open('media/name.txt', 'wb+') as destination:
+        for chunk in in_file.chunks():
+            destination.write(chunk)
 
 
 def sample_index(request):
