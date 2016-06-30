@@ -131,4 +131,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_ROOT = 'media/'
-
+MEDIA_URL = 'media/'
+STATICFILES_DIRS = 'media/'
+ADMIN_MEDIA_PREFIX = 'media/'

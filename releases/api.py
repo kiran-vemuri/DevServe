@@ -17,7 +17,7 @@ class ComponentResource(ModelResource):
     class Meta:
         queryset = Component.objects.all()
         resource_name = 'component'
-        authorization = Authorization()
+        #authorization = Authorization()
 
 
 class BinaryResource(ModelResource):
@@ -27,4 +27,4 @@ class BinaryResource(ModelResource):
     class Meta:
         queryset = Binary.objects.all()
         resource_name = 'binary'
-        #authorization = Authorization()
+        authorization = Authorization()

@@ -3,7 +3,7 @@
     {% if binary_list %}
         <ul>
         {% for binary in binary_list %}
-            <li><a href="#">{{ binary.name }}</a></li>
+            <li><a href="{% url 'product_index' %}{{ binary.path }}">{{ binary.name }}</a></li>
         {% endfor %}
         </ul>
     {% else %}

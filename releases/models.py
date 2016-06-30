@@ -12,7 +12,6 @@ class Product(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200, blank=False, unique=True)
     create_date = models.DateTimeField(auto_now_add=True)
-    path = models.CharField(max_length=500, blank=False, default=os.path.abspath('/tmp/'))
 
     def __str__(self):
         return self.name
@@ -24,7 +23,6 @@ class Component(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     name = models.CharField(max_length=200,blank=False, unique=True)
     create_date = models.DateTimeField(auto_now_add=True)
-    path = models.CharField(max_length=500, blank=False, default='tmp/')
 
     def __str__(self):
         return self.name

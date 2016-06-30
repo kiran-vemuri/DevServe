@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.conf import settings
-import json, os
+import json, os,  datetime
 from .models import Product, Component, Binary
 from .forms import UploadFileForm
 
@@ -50,11 +50,21 @@ def binary_upload(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            component_object = Component.objects.get(id=form.data['component'])
-            product_object = Product.objects.get(id=component_object.product_id)
-            binary_path = product_object.path + component_object.path
-            binary_object = Binary.objects.create(name='test', component_id=form.data['component'], path=binary_path)
-            handle_uploaded_file(request.FILES['file'], binary_path)
+            component_obj = Component.objects.get(id=form.data['component'])
+            binary_path = 'media/releases/'
+            binary_path = os.path.join(binary_path, datetime.datetime.now().strftime('%Y_%m_%d'))
+            if not os.path.exists(os.path.abspath(binary_path)):
+                os.makedirs(binary_path)
+            file_name = "%s_%s_%s" %(component_obj.name,
+                                     form.data['title'],
+                                     str(datetime.datetime.now().strftime('%Y_%m_%d')))
+            binary_path = os.path.join(binary_path, file_name)
+            if handle_uploaded_file(request.FILES['file'], binary_path):
+                if form.data['notes']:
+                    binary_object = Binary.objects.create(name=file_name,
+                                                          component_id=form.data['component'],
+                                                          path=binary_path,
+                                                          notes=form.data['notes'])
             return HttpResponseRedirect('/success/url/')
     else:
         form = UploadFileForm()
@@ -63,14 +73,17 @@ def binary_upload(request):
 
 def handle_uploaded_file(in_file, binary_path):
     print binary_path
-    if not os.path.exists(os.path.abspath(binary_path)):
+    """
+    if not os.path.exists(os.path.abspath(binary_name)):
         try:
-            os.makedirs(os.path.dirname(binary_path))
+            os.makedirs(os.path.dirname(binary_name))
         except OSError as exc:
             raise
-    with open('media/name.txt', 'wb+') as destination:
+    """
+    with open(binary_path, 'wb+') as destination:
         for chunk in in_file.chunks():
             destination.write(chunk)
+        return True
 
 
 def sample_index(request):
