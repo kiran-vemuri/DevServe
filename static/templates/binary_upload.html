@@ -1,9 +1,39 @@
 {% extends "base.html" %}
-{% block body %}
-    <form enctype="multipart/form-data" method="post" action="{{ request.path }}">
+{% block restbody %}
+    <form {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}
+          method="post"
+          action="{{ request.path }}"
+          class="form-horizontal">
         {% csrf_token %}
-        {{ form.as_p}}
-        <button type="submit"> upload file</button>
+        {{ form.media }}
+        {% if form.errors %}
+            <div class="alert alert-error">
+                <ul>
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% for field in form.visible_fields %}
+            <div class="control-group {{ field.html_name }} {% if field.errors %}error{% endif %}">
+                <label class="control-label">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+                <div class="controls">
+                    {{ field }}
+                    {% if field.errors %}<span class="help-inline">{{ field.errors.as_text }}</span>{% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        {% for field in form.hidden_fields %}
+            {{ field }}
+        {% endfor %}
+
+        <div class="form-actions">
+            <input class="btn btn-primary btn-large" type="submit" value="Upload"/>
+            {% block extra_buttons %}
+            {% endblock extra_buttons %}
+        </div>
+        <!--<button type="submit"> upload file</button>-->
     </form>
 
 {% endblock %}

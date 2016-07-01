@@ -1,13 +1,27 @@
 {% extends "base.html" %}
-{% block body %}
+
+{% block dirpath %}
+    <p class="directory_path">Path:
+        <a href="/releases/">Releases</a>/<a
+                href="/releases/{{ product_object.id }}">{{ product_object.name }}</a>/<a
+                href="/releases/{{ product_object.id }}/{{ component_object.id }}">{{ component_object.name }}</a>
+    </p>
+{% endblock %}
+
+{% block tlist %}
+    <thead>
+        <tr><th>
+            Binary
+        </th></tr>
+    </thead>
+    <tbody class="table table-hover">
     {% if binary_list %}
-        <ul>
         {% for binary in binary_list %}
-            <li><a href="{% url 'product_index' %}{{ binary.path }}">{{ binary.name }}</a></li>
+            <tr><td><a href="{% url 'product_index' %}{{ binary.path }}">{{ binary.name }}</a></td></tr>
         {% endfor %}
-        </ul>
     {% else %}
-        <p>No binaries available for component: <b>{{ component_object.name }}</b>.</p>
+        <tr><td>No binaries available for component: <b>{{ component_object.name }}</b>.</td></tr>
     {% endif %}
+    </tbody>
 
 {% endblock %}

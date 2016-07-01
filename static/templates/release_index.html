@@ -1,16 +1,30 @@
 {% extends "base.html" %}
-{% block body %}
-{% if product_list %}
-    <ul>
-    {% for product in product_list %}
-        <li><a href="/releases/{{ product.id }}/">{{ product.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No products available.</p>
-{% endif %}
-    <hr />
-    <a href="/releases/binary_upload">
-        Upload new binary
+
+{% block dirpath %}
+    <p class="directory_path">Path: <a href="/releases/">Releases</a></p>
+{% endblock %}
+
+{% block tlist %}
+   <thead>
+        <tr>
+            <th>
+                Product
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if product_list %}
+        {% for product in product_list %}
+            <tr><td><a href="/releases/{{ product.id }}/">{{ product.name }}</a></td></tr>
+        {% endfor %}
+    {% else %}
+        <tr><td>No products available.</td></tr>
+    {% endif %}
+    </tbody>
+{% endblock %}
+
+{% block restbody %}
+    <a class="btn btn-primary" href="/releases/binary_upload">
+        Upload Binary
     </a>
 {% endblock %}

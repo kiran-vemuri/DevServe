@@ -38,9 +38,10 @@ def component_index(request, product_id):
 def binary_index(request, product_id, component_id):
     binary_list = Binary.objects.filter(component_id=component_id)
     component_object = Component.objects.get(id=component_id)
+    product_object = Product.objects.get(id=product_id)
     context = {
         'binary_list': binary_list,
-        'product_id': product_id,
+        'product_object': product_object,
         'component_object': component_object,
     }
     return render(request, 'binary_index.html', context)

@@ -1,12 +1,27 @@
 {% extends "base.html" %}
-{% block body %}
+
+{% block dirpath %}
+    <p class="directory_path">Path:
+        <a href="/releases/">Releases</a>/<a
+                href="/releases/{{ product_object.id }}">{{ product_object.name }}</a>
+    </p>
+{% endblock %}
+
+{% block tlist %}
+    <thead>
+        <tr>
+            <th>
+                Component
+            </th>
+        </tr>
+    </thead>
+    <tbody>
     {% if component_list %}
-        <ul>
         {% for component in component_list %}
-            <li><a href="/releases/{{ product_object.id }}/{{ component.id }}/">{{ component.name }}</a></li>
+            <tr><td><a href="/releases/{{ product_object.id }}/{{ component.id }}/">{{ component.name }}</a></td></tr>
         {% endfor %}
-        </ul>
     {% else %}
-        <p>No components available for product: <b>{{ product_object.name }}</b></p>
+        <tr><td>No components available for product: <b>{{ product_object.name }}</b></td></tr>
     {% endif %}
+    </tbody>
 {% endblock %}
