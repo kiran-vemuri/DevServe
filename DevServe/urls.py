@@ -15,16 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from tastypie.api import Api
-from releases.api import BinaryResource, ComponentResource, ProductResource
+from rest_framework import routers
+from releases import views
 
-rest_api = Api(api_name='rest')
-rest_api.register(BinaryResource())
-rest_api.register(ComponentResource())
-rest_api.register(ProductResource())
+
+router = routers.DefaultRouter()
+router.register(r'products', views.ProductViewSet)
+router.register(r'components', views.ComponentViewSet)
+router.register(r'binaries', views.BinaryViewSet)
 
 urlpatterns = [
     url(r'^releases/', include('releases.urls')),
-    url(r'^api/', include(rest_api.urls)),
     url(r'^admin/', admin.site.urls),
+    url(r'^rest/', include(router.urls)),
+    url(r'^rest-api/', include('rest_framework.urls', namespace='rest_framework')),
 ]

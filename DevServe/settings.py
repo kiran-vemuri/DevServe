@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'releases.apps.ReleasesConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -117,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Los_Angeles'
 
 USE_I18N = True
 
@@ -134,3 +135,19 @@ MEDIA_ROOT = 'media/'
 MEDIA_URL = 'media/'
 STATICFILES_DIRS = ['media/', 'static/']
 ADMIN_MEDIA_PREFIX = 'media/'
+
+"""
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGE_SIZE': 10
+}
+"""
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
+    'PAGE_SIZE': 10,
+}
+
+
+# DevServe custom settings
+
+DS_SERVER_IP = '10.10.1.154:8000'

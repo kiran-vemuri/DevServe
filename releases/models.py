@@ -34,6 +34,7 @@ class Binary(models.Model):
     component = models.ForeignKey(Component, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=300, blank=False)
     path = models.FilePathField()
+    url = models.CharField(max_length=1000, default="#")
     notes = models.CharField(max_length=2000, blank=False, default="*No Notes Provided*")
     status = models.CharField(max_length=20, blank=False, default="New")
     upload_date = models.DateTimeField(auto_now_add=True)
