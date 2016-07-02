@@ -127,13 +127,12 @@ class BinaryViewSet(viewsets.ModelViewSet):
     API endpoint that allows components to be viewed or edited
     """
     queryset = Binary.objects.all().order_by('upload_date')
+    queryset = queryset.reverse()
     serializer_class = BinarySerializer
     parser_classes = (FormParser, MultiPartParser, )
     #parser_classes = (FileUploadParser,)
 
     def create(self, request):
-        #file_obj = request.data['file']
-        # file_obj = request.data['file']
 
         if request.data['name'] and request.data['notes'] and request.data['component_id'] and request.FILES['file']:
             component_id = request.data['component_id']
@@ -152,7 +151,7 @@ class BinaryViewSet(viewsets.ModelViewSet):
             if not os.path.exists(os.path.abspath(binary_path)):
                 os.makedirs(binary_path)
             binary_path = os.path.join(binary_path, file_name)
-            binary_url = settings.DS_SERVER_IP + reverse('product_index') + binary_path
+            binary_url = "http://"+settings.DS_SERVER_IP + reverse('product_index') + binary_path
 
 
 
