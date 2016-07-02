@@ -149,6 +149,8 @@ class BinaryViewSet(viewsets.ModelViewSet):
 
             binary_path = 'media/releases/'
             binary_path = os.path.join(binary_path, datetime.datetime.now().strftime('%Y_%m_%d'))
+            if not os.path.exists(os.path.abspath(binary_path)):
+                os.makedirs(binary_path)
             binary_path = os.path.join(binary_path, file_name)
             binary_url = settings.DS_SERVER_IP + reverse('product_index') + binary_path
 
@@ -156,6 +158,7 @@ class BinaryViewSet(viewsets.ModelViewSet):
 
             print reverse('product_index')
             print settings.DS_SERVER_IP
+
 
             with open(binary_path, 'wb+') as destination:
                 for chunk in file_obj.chunks():
