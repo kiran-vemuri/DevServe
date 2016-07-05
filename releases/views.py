@@ -101,6 +101,19 @@ def handle_uploaded_file(in_file, binary_path):
         return True
 
 
+def binary_status_change(request, product_id, component_id, binary_id, new_status):
+    """
+    Method to change the status on an uploaded binary.
+    """
+    binary_object = Binary.objects.get(id=binary_id)
+    binary_object.status = new_status
+    binary_object.save()
+    redirect_url = "/releases/%s/%s/" % (str(product_id), str(component_id))
+    return HttpResponseRedirect(redirect_url)
+
+
+
+
 """
 Handlers for REST API follow!
 """

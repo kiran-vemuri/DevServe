@@ -36,7 +36,7 @@ class Binary(models.Model):
     path = models.FilePathField()
     url = models.CharField(max_length=1000, default="#")
     notes = models.CharField(max_length=2000, blank=False, default="*No Notes Provided*")
-    status = models.CharField(max_length=20, blank=False, default="New")
+    status = models.CharField(max_length=20, blank=False, default="new")
     upload_date = models.DateTimeField(auto_now_add=True)
     status_change_date = models.DateTimeField(auto_now=True)
 

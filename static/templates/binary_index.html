@@ -23,6 +23,9 @@
             <th>
                 Info
             </th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody class="table table-hover">
@@ -33,6 +36,14 @@
                 <td>{{ binary.upload_date }}</td>
                 <td><a href="#" rel="tooltip" title="{{ binary.status_change_date}}">{{ binary.status}}</a></td>
                 <td><a href="#" class="glyphicon glyphicon-info-sign" rel="tooltip" title="{{ binary.notes }}"></a></td>
+                <td>
+                    <a class="btn btn-primary btn-xs"
+                       href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/stable/" >Stable</a>
+                    <a class="btn btn-success btn-xs"
+                       href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/production/" >Production</a>
+                    <a class="btn btn-danger btn-xs"
+                       href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/unstable/" >Unstable</a>
+                </td>
             </tr>
         {% endfor %}
     {% else %}
