@@ -6,9 +6,22 @@ from rest_framework.response import Response
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from releases.serializers import ProductSerializer, ComponentSerializer, BinarySerializer
-import json, os,  datetime
+import os,  datetime, hashlib
 from releases.models import Product, Component, Binary
 from .forms import UploadFileForm
+
+"""
+generic function definitions
+"""
+
+
+def md5_cal(fname):
+    hash_md5 = hashlib.md5()
+    with open(fname, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
+
 
 
 """
@@ -78,7 +91,8 @@ def binary_upload(request):
                                                           component_id=form.data['component'],
                                                           path=binary_path,
                                                           url=binary_url,
-                                                          notes=form.data['notes'])
+                                                          notes=form.data['notes'],
+                                                          md5sum=md5_cal(binary_path))
                     print binary_object.id
             return HttpResponseRedirect('/rest/binaries/'+str(binary_object.id))
     else:
@@ -180,7 +194,8 @@ class BinaryViewSet(viewsets.ModelViewSet):
                                                   component_id=component_id,
                                                   path=binary_path,
                                                   url=binary_url,
-                                                  notes=notes)
+                                                  notes=notes,
+                                                  md5sum=md5_cal(binary_path))
 
         return Response({'upload': 'success', 'binary_url': binary_url})
 

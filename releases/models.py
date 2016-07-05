@@ -39,6 +39,7 @@ class Binary(models.Model):
     status = models.CharField(max_length=20, blank=False, default="new")
     upload_date = models.DateTimeField(auto_now_add=True)
     status_change_date = models.DateTimeField(auto_now=True)
+    md5sum = models.CharField(max_length=40, default="Not Available")
 
     def __str__(self):
         return self.name
