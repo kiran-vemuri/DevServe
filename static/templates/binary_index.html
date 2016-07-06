@@ -38,8 +38,7 @@
                 <td><a href="#"
                        class="glyphicon glyphicon-info-sign"
                        rel="tooltip"
-                       title="Notes: {{ binary.notes }}
-                       Md5sum: {{ binary.md5sum }}"></a></td>
+                       title="Notes: {{ binary.notes }} &#13;Md5sum: {{ binary.md5sum }}"></a></td>
                 <td>
                     <a class="btn btn-primary btn-xs"
                        href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/stable/" >Stable</a>
