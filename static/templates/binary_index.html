@@ -33,17 +33,19 @@
         {% for binary in binary_list %}
             <tr>
                 {% if binary.status != 'unstable' %}
-                    <td><a href="{% url 'product_index' %}{{ binary.path }}">{{ binary.name }}</a></td>
+                    <td><a href="{% url 'product_index' %}{{ binary.url }}">{{ binary.name }}</a></td>
                 {% else %}
                     <!--<td><a href="{% url 'product_index' %}{{ binary.path }}">{{ binary.name }}</a></td>-->
                     <td><s class="binary_unstable">{{ binary.name }}</s></td>
                 {% endif %}
                 <td>{{ binary.upload_date }}</td>
                 <td><a href="#" rel="tooltip" title="{{ binary.status_change_date}}">{{ binary.status}}</a></td>
-                <td><a href="#"
+                <td>
+                    <a href="#"
                        class="glyphicon glyphicon-info-sign"
                        rel="tooltip"
-                       title="Notes: {{ binary.notes }} &#13;Md5sum: {{ binary.md5sum }}"></a></td>
+                       title="Notes: {{ binary.notes }} &#13;Md5sum: {{ binary.md5sum }}"></a>
+                </td>
                 <td>
                     <a class="btn btn-primary btn-xs"
                        href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/stable/" >Stable</a>
