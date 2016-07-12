@@ -48,7 +48,9 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#sortedtable').DataTable();
+            $('#sortedtable').DataTable( {
+                    "order": [[1, "desc"]]
+            } );
         } );
     </script>
 </body>
