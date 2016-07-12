@@ -33,7 +33,7 @@
         {% for binary in binary_list %}
             <tr>
                 {% if binary.status != 'unstable' %}
-                    <td><a href="{% url 'product_index' %}{{ binary.url }}">{{ binary.name }}</a></td>
+                    <td><a href="{{ binary.url }}">{{ binary.name }}</a></td>
                 {% else %}
                     <!--<td><a href="{% url 'product_index' %}{{ binary.path }}">{{ binary.name }}</a></td>-->
                     <td><s class="binary_unstable">{{ binary.name }}</s></td>
