@@ -33,7 +33,7 @@ class Binary(models.Model):
     id = models.AutoField(primary_key=True)
     component = models.ForeignKey(Component, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=300, blank=False)
-    path = models.FilePathField()
+    path = models.FilePathField(max_length=1000)
     url = models.CharField(max_length=1000, default="#")
     notes = models.CharField(max_length=2000, blank=False, default="*No Notes Provided*")
     status = models.CharField(max_length=20, blank=False, default="new")
