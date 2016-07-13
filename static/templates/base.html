@@ -45,13 +45,8 @@
     <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <!-- Devserve JS -->
+    <script src="{% static 'js/devserve.js' %}"></script>
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#sortedtable').DataTable( {
-                    "order": [[1, "desc"]]
-            } );
-        } );
-    </script>
 </body>
 </html>
