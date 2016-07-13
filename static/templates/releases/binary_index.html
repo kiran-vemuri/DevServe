@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
+{% block title %} Binary Index {% endblock %}
+
 {% block dirpath %}
     <p class="directory_path">Path:
-        <a href="/releases/">Releases</a>/<a
+        <a href="/releases">Releases</a>/<a
                 href="/releases/{{ product_object.id }}">{{ product_object.name }}</a>/<a
                 href="/releases/{{ product_object.id }}/{{ component_object.id }}">{{ component_object.name }}</a>
     </p>

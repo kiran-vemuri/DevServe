@@ -1,10 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 from rest_framework import viewsets, status
 from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser, FormParser
 from rest_framework.response import Response
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.contrib.auth.forms import UserCreationForm
+from django.core.context_processors import csrf
+
+
 from releases.serializers import ProductSerializer, ComponentSerializer, BinarySerializer
 import os,  datetime, hashlib
 from releases.models import Product, Component, Binary
@@ -39,7 +43,7 @@ def product_index(request):
     context = {
         'product_list': product_list
     }
-    return render(request, 'release_index.html', context)
+    return render(request, 'releases/release_index.html', context)
 
 
 def component_index(request, product_id):
@@ -55,7 +59,7 @@ def component_index(request, product_id):
         'component_list': component_list,
         'product_object': product_object,
     }
-    return render(request, 'component_index.html', context)
+    return render(request, 'releases/component_index.html', context)
 
 
 def binary_index(request, product_id, component_id):
@@ -67,7 +71,7 @@ def binary_index(request, product_id, component_id):
         'product_object': product_object,
         'component_object': component_object,
     }
-    return render(request, 'binary_index.html', context)
+    return render(request, 'releases/binary_index.html', context)
 
 
 def binary_upload(request):
@@ -97,7 +101,7 @@ def binary_upload(request):
             return HttpResponseRedirect('/rest/binaries/'+str(binary_object.id))
     else:
         form = UploadFileForm()
-    return render(request, 'binary_upload.html', {'form': form})
+    return render(request, 'releases/binary_upload.html', {'form': form})
 
 
 def handle_uploaded_file(in_file, binary_path):
@@ -125,7 +129,7 @@ def binary_status_change(request, product_id, component_id, binary_id, new_statu
     redirect_url = "/releases/%s/%s/" % (str(product_id), str(component_id))
     return HttpResponseRedirect(redirect_url)
 
-
+# TODO: Add user registration and user login features
 
 
 """

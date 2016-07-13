@@ -6,9 +6,6 @@ $(document).ready(function() {
     });
 });
 
-
-
-
 // Binary status changes
 function status_change() {
     var abc = confirm('Do you want to change the status on this item?');
