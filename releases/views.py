@@ -88,7 +88,7 @@ def binary_upload(request):
                                      str(datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')),
                                         request.FILES['file'].name)
             binary_path = os.path.join(binary_path, file_name)
-            binary_url = settings.DS_SERVER_IP+reverse('product_index')+binary_path
+            binary_url = "http://"+settings.DS_SERVER_IP+reverse('product_index')+binary_path
             if handle_uploaded_file(request.FILES['file'], binary_path):
                 if form.data['notes']:
                     binary_object = Binary.objects.create(name=file_name,
