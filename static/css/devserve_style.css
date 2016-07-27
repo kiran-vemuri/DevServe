@@ -50,3 +50,9 @@ h1, h2, h3, h4 {
 .binary_unstable{
     color: darkred;
 }
+
+.borderlist {
+    list-style-position:inside;
+    border: 1px ridge #DDDDDD;
+    border-radius: 10px;
+}
