@@ -49,12 +49,16 @@
                        title="Notes: {{ binary.notes }} &#13;Md5sum: {{ binary.md5sum }}"></a>
                 </td>
                 <td>
-                    <a class="btn btn-primary btn-xs" onclick="return (status_change())"
+                    {% if binary.status != 'unstable' %}
+                        <a class="btn btn-primary btn-xs" onclick="return (status_change())"
                        href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/stable/" >Stable</a>
-                    <a class="btn btn-success btn-xs" onclick="return (status_change())"
-                       href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/production/" >Production</a>
-                    <a class="btn btn-danger btn-xs" onclick="return (status_change())"
-                       href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/unstable/" >Unstable</a>
+                        <a class="btn btn-success btn-xs" onclick="return (status_change())"
+                           href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/production/" >Production</a>
+                        <a class="btn btn-danger btn-xs" onclick="return (status_change())"
+                           href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/unstable/" >Unstable</a>
+                    {% else %}
+                        <b class="binary_unstable">No actions available</b>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
