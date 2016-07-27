@@ -2,7 +2,7 @@
 $(document).ready(function() {
     $('#sortedtable').DataTable({
         "order": [[1, "desc"]],
-        "pageLength": 10,
+        "pageLength": 12,
     });
 });
 
