@@ -7,12 +7,30 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django.core.context_processors import csrf
+import logging
+from logging.config import dictConfig
 
 
 from releases.serializers import ProductSerializer, ComponentSerializer, BinarySerializer
 import os,  datetime, hashlib
 from releases.models import Product, Component, Binary
 from .forms import UploadFileForm
+
+"""
+logger
+"""
+# TODO:
+# logfile = os.path.abspath("/media/logs/devserve.log")
+#
+# logger = logging.getLogger(__name__)
+# logger.setLevel(logging.INFO)
+# handler = logging.FileHandler(logfile)
+# handler.setLevel(logging.INFO)
+#
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# handler.setFormatter(formatter)
+#
+# logger.addHandler(handler)
 
 """
 generic function definitions
@@ -26,6 +44,15 @@ def md5_cal(fname):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
+# TODO:
+def remove_file(fpath):
+    #fpath = "/Users/kvemuri/Documents/KiranRepos/DevServe/media/releases/2016_07_15/SQA_ReleaseManagement_releaseupload_2016_07_15_12_16_33_devserve_upload.py_bak"
+    print fpath
+    print os.path.dirname(fpath)
+    if os.path.exists(fpath) and os.path.isfile(fpath):
+        os.remove(fpath)
+    print os.listdir(os.path.dirname(fpath))
+    logger.info(os.listdir(os.path.dirname(fpath)))
 
 
 """
@@ -63,7 +90,7 @@ def component_index(request, product_id):
 
 
 def binary_index(request, product_id, component_id):
-    binary_list = Binary.objects.filter(component_id=component_id)
+    binary_list = Binary.objects.filter(component_id=component_id).order_by('-upload_date')
     component_object = Component.objects.get(id=component_id)
     product_object = Product.objects.get(id=product_id)
     context = {
@@ -124,10 +151,25 @@ def binary_status_change(request, product_id, component_id, binary_id, new_statu
     Method to change the status on an uploaded binary.
     """
     binary_object = Binary.objects.get(id=binary_id)
-    binary_object.status = new_status
-    binary_object.save()
+    # binary_object.status = new_status
+    # binary_object.save()
     redirect_url = "/releases/%s/%s/" % (str(product_id), str(component_id))
+    if request.method == 'POST':
+        print request.POST.get("change_notes")
+        print request.POST.get("bug_url")
+        #binary_object.change_notes = request.POST.get("change_notes")
+        #binary_object.bug_url = request.POST.get("bug_url")
     return HttpResponseRedirect(redirect_url)
+
+# TODO:
+def clear_unstable_binaries(request):
+    binary_list = Binary.objects.filter(status="unstable")
+    # for binary in binary_list:
+    #     print binary.path
+    remove_file(os.path.abspath(binary_list[0].path))
+
+    return HttpResponseRedirect("/releases")
+
 
 # TODO: Add user registration and user login features
 
