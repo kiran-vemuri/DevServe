@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %} Binary Upload {% endblock %}
+
+{% block restbody %}
+    {% for binary in binary_list %}
+        <p>{{binary.status_change_date}}</p>
+    {% endfor %}
+
+{% endblock %}

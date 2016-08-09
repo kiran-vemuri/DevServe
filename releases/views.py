@@ -162,6 +162,16 @@ def binary_status_change(request, product_id, component_id, binary_id, new_statu
         binary_object.save()
     return HttpResponseRedirect(redirect_url)
 
+
+def activity_report(request):
+    binary_list = Binary.objects.all().order_by('-status_change_date')
+    context = {
+        'binary_list': binary_list
+    }
+    print binary_list[0].status_change_date
+    return render(request, 'releases/activity_report.html', context)
+
+
 # TODO:
 def clear_unstable_binaries(request):
     binary_list = Binary.objects.filter(status="unstable")

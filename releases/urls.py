@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^binary_upload$',
         views.binary_upload,
         name='binary_upload'),
+    url(r'^activity_report/$', views.activity_report)
     # url(r'^admin_action/clear_unstable_binaries', views.clear_unstable_binaries),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

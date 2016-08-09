@@ -70,6 +70,18 @@
                                             <td>Md5sum</td>
                                             <td>{{ binary.md5sum }}</td>
                                         </tr>
+                                        <tr>
+                                            <td>Change Notes</td>
+                                            <td>{{ binary.change_notes }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bug URL</td>
+                                            {% if binary.bug_url != '' %}
+                                                <td>{{ binary.bug_url}}</td>
+                                            {% else %}
+                                                <td> No bugs filed </td>
+                                            {% endif %}
+                                        </tr>
                                     </table>
                                 </div>
                                 <div class="modal-footer">
