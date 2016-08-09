@@ -151,14 +151,15 @@ def binary_status_change(request, product_id, component_id, binary_id, new_statu
     Method to change the status on an uploaded binary.
     """
     binary_object = Binary.objects.get(id=binary_id)
-    # binary_object.status = new_status
+    binary_object.status = new_status
     # binary_object.save()
     redirect_url = "/releases/%s/%s/" % (str(product_id), str(component_id))
     if request.method == 'POST':
-        print request.POST.get("change_notes")
-        print request.POST.get("bug_url")
-        #binary_object.change_notes = request.POST.get("change_notes")
-        #binary_object.bug_url = request.POST.get("bug_url")
+        #print request.POST.get("change_notes")
+        #print request.POST.get("bug_url")
+        binary_object.change_notes = request.POST.get("change_notes")
+        binary_object.bug_url = request.POST.get("bug_url")
+        binary_object.save()
     return HttpResponseRedirect(redirect_url)
 
 # TODO:
