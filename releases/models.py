@@ -23,7 +23,7 @@ class Component(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     name = models.CharField(max_length=200,blank=False, unique=True)
     create_date = models.DateTimeField(auto_now_add=True)
-    component_owner = models.CharField(max_length=200, default="No Owner Specified")
+    owner = models.CharField(max_length=200, default="No Owner Specified")
 
     def __str__(self):
         return self.name
