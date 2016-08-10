@@ -51,8 +51,10 @@ class Binary(models.Model):
 class EventLog(models.Model):
     id = models.AutoField(primary_key=True)
     binary = models.ForeignKey(Binary, on_delete=models.CASCADE, null=True)
+    component = models.ForeignKey(Component, on_delete=models.CASCADE, null=True)
     event_date = models.DateTimeField(auto_now_add=True)
     event_log = models.TextField(default="No event log")
+    status_change = models.CharField(max_length=20, blank=False, default="new")
 
     def __str__(self):
         return self.event_log

@@ -125,11 +125,10 @@ def binary_upload(request):
                                                           notes=form.data['notes'],
                                                           md5sum=md5_cal(binary_path))
                     print binary_object.id
-                    event_log = "New binary uploaded for component:{} with name: {} and " \
-                                "developer_notes: {}".format(component_obj.name,
-                                                             binary_object.name,
-                                                             binary_object.notes)
+                    event_log = "Developer_Notes: {}".format(binary_object.notes)
                     event_object = EventLog.objects.create(binary=binary_object.id,
+                                                           component=component_obj.id,
+                                                           status_change="upload",
                                                            event_log=event_log)
                     print "New event: {}".format(event_object.event_log)
             return HttpResponseRedirect('/rest/binaries/'+str(binary_object.id))
@@ -167,19 +166,13 @@ def binary_status_change(request, product_id, component_id, binary_id, new_statu
         binary_object.bug_url = request.POST.get("bug_url")
         binary_object.save()
         if binary_object.bug_url == "":
-            event_log = "Binary marked {} for component:{} with binary_name: {}, " \
-                        "change_notes: {} and bug: No bugs available".format(binary_object.status,
-                                                                             component_obj.name,
-                                                                             binary_object.name,
-                                                                             binary_object.change_notes)
+            event_log = "Change_Notes: '{}' ".format(binary_object.change_notes)
         else:
-            event_log = "Binary marked {} for component:{} with binary_name: {}, " \
-                        "change_notes: {} and bug: {}".format(binary_object.status,
-                                                              component_obj.name,
-                                                              binary_object.name,
-                                                              binary_object.change_notes,
-                                                              binary_object.bug_url)
+            event_log = "Change_Notes: '{}' and Bug: '{}'".format(binary_object.change_notes,
+                                                                  binary_object.bug_url)
         event_object = EventLog.objects.create(binary=binary_object,
+                                               component=component_obj.id,
+                                               status_change=binary_object.status,
                                                event_log=event_log)
         print "New event: {}".format(event_object.event_log)
     return HttpResponseRedirect(redirect_url)
@@ -188,11 +181,13 @@ def binary_status_change(request, product_id, component_id, binary_id, new_statu
 def activity_report(request):
     binary_list = Binary.objects.all().order_by('-status_change_date')
     event_list = EventLog.objects.all().order_by('-event_date')
+    event_date_list = EventLog.objects.datetimes('event_date', 'day', order="DESC")
     context = {
-        'binary_list': binary_list,
-        'event_list': event_list
+        'event_list': event_list,
+        'event_date_list': event_date_list,
     }
-    print binary_list[0].status_change_date
+    print EventLog.objects.datetimes('event_date', 'day', order="DESC")
+    print EventLog.objects.filter(event_date__date=datetime.date(2016, 8, 10))
     return render(request, 'releases/activity_report.html', context)
 
 
@@ -274,11 +269,10 @@ class BinaryViewSet(viewsets.ModelViewSet):
                                                   url=binary_url,
                                                   notes=notes,
                                                   md5sum=md5_cal(binary_path))
-            event_log = "New binary uploaded for component:{} with name: {} and " \
-                        "developer_notes: {}".format(component_obj.name,
-                                                     binary_object.name,
-                                                     binary_object.notes)
+            event_log = "Developer_Notes: {}".format(binary_object.notes)
             event_object = EventLog.objects.create(binary=binary_object.id,
+                                                   component=component_obj.id,
+                                                   status_change="upload",
                                                    event_log=event_log)
             print "New event: {}".format(event_object.event_log)
 

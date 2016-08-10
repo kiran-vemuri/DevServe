@@ -3,6 +3,9 @@
 {% block title %} Binary Upload {% endblock %}
 
 {% block restbody %}
+    {% for event_date in event_date_list %}
+        <a href="{{event_date.year}}/{{event_date.month}}/{{event_date.day}}">{{ event_date.date}}</a>
+    {% endfor %}
     {% for event in event_list %}
         <p>{{event.event_date}}: {{event.event_log}}</p>
     {% endfor %}
