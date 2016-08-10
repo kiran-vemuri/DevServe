@@ -180,11 +180,13 @@ def binary_status_change(request, product_id, component_id, binary_id, new_statu
 
 def activity_report(request):
     binary_list = Binary.objects.all().order_by('-status_change_date')
+    component_list = Binary.objects.all()
     event_list = EventLog.objects.all().order_by('-event_date')
     event_date_list = EventLog.objects.datetimes('event_date', 'day', order="DESC")
     context = {
         'event_list': event_list,
         'event_date_list': event_date_list,
+        'component_list': component_list,
     }
     print EventLog.objects.datetimes('event_date', 'day', order="DESC")
     print EventLog.objects.filter(event_date__date=datetime.date(2016, 8, 10))

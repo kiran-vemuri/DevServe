@@ -6,8 +6,10 @@
     {% for event_date in event_date_list %}
         <a href="{{event_date.year}}/{{event_date.month}}/{{event_date.day}}">{{ event_date.date}}</a>
     {% endfor %}
+    <table>
     {% for event in event_list %}
-        <p>{{event.event_date}}: {{event.event_log}}</p>
+        <tr><td>{{event.event_date}}</td> <td><code>{{event.event_log}}</code></td><td>{{event.component_id}}</td></tr>
     {% endfor %}
+    </table>
 
 {% endblock %}
