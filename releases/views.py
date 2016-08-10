@@ -13,7 +13,7 @@ from logging.config import dictConfig
 
 from releases.serializers import ProductSerializer, ComponentSerializer, BinarySerializer
 import os,  datetime, hashlib
-from releases.models import Product, Component, Binary
+from releases.models import Product, Component, Binary, EventLog
 from .forms import UploadFileForm
 
 """
@@ -125,6 +125,13 @@ def binary_upload(request):
                                                           notes=form.data['notes'],
                                                           md5sum=md5_cal(binary_path))
                     print binary_object.id
+                    event_log = "New binary uploaded for component:{} with name: {} and " \
+                                "developer_notes: {}".format(component_obj.name,
+                                                             binary_object.name,
+                                                             binary_object.notes)
+                    event_object = EventLog.objects.create(binary=binary_object.id,
+                                                           event_log=event_log)
+                    print "New event: {}".format(event_object.event_log)
             return HttpResponseRedirect('/rest/binaries/'+str(binary_object.id))
     else:
         form = UploadFileForm()
@@ -151,22 +158,39 @@ def binary_status_change(request, product_id, component_id, binary_id, new_statu
     Method to change the status on an uploaded binary.
     """
     binary_object = Binary.objects.get(id=binary_id)
+    component_obj = Component.objects.get(id=binary_object.component.id)
     binary_object.status = new_status
     # binary_object.save()
     redirect_url = "/releases/%s/%s/" % (str(product_id), str(component_id))
     if request.method == 'POST':
-        #print request.POST.get("change_notes")
-        #print request.POST.get("bug_url")
         binary_object.change_notes = request.POST.get("change_notes")
         binary_object.bug_url = request.POST.get("bug_url")
         binary_object.save()
+        if binary_object.bug_url == "":
+            event_log = "Binary marked {} for component:{} with binary_name: {}, " \
+                        "change_notes: {} and bug: No bugs available".format(binary_object.status,
+                                                                             component_obj.name,
+                                                                             binary_object.name,
+                                                                             binary_object.change_notes)
+        else:
+            event_log = "Binary marked {} for component:{} with binary_name: {}, " \
+                        "change_notes: {} and bug: {}".format(binary_object.status,
+                                                              component_obj.name,
+                                                              binary_object.name,
+                                                              binary_object.change_notes,
+                                                              binary_object.bug_url)
+        event_object = EventLog.objects.create(binary=binary_object,
+                                               event_log=event_log)
+        print "New event: {}".format(event_object.event_log)
     return HttpResponseRedirect(redirect_url)
 
 
 def activity_report(request):
     binary_list = Binary.objects.all().order_by('-status_change_date')
+    event_list = EventLog.objects.all().order_by('-event_date')
     context = {
-        'binary_list': binary_list
+        'binary_list': binary_list,
+        'event_list': event_list
     }
     print binary_list[0].status_change_date
     return render(request, 'releases/activity_report.html', context)
@@ -237,11 +261,8 @@ class BinaryViewSet(viewsets.ModelViewSet):
             binary_path = os.path.join(binary_path, file_name)
             binary_url = "http://"+settings.DS_SERVER_IP + reverse('product_index') + binary_path
 
-
-
             print reverse('product_index')
             print settings.DS_SERVER_IP
-
 
             with open(binary_path, 'wb+') as destination:
                 for chunk in file_obj.chunks():
@@ -253,6 +274,13 @@ class BinaryViewSet(viewsets.ModelViewSet):
                                                   url=binary_url,
                                                   notes=notes,
                                                   md5sum=md5_cal(binary_path))
+            event_log = "New binary uploaded for component:{} with name: {} and " \
+                        "developer_notes: {}".format(component_obj.name,
+                                                     binary_object.name,
+                                                     binary_object.notes)
+            event_object = EventLog.objects.create(binary=binary_object.id,
+                                                   event_log=event_log)
+            print "New event: {}".format(event_object.event_log)
 
         return Response({'upload': 'success', 'binary_url': binary_url})
 

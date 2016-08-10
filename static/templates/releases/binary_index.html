@@ -104,12 +104,12 @@
                        href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/stable/" >Stable</a>
                         <a class="btn btn-success btn-xs" onclick="return (status_change())"
                            href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/production/" >Production</a>
-                        <a class="btn btn-danger btn-xs" onclick="return (status_change())"
-                           href ="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/unstable/" >Unstable</a>
-                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal">Open</button>
+                        <!--<a class="btn btn-danger btn-xs" onclick="return (status_change())"-->
+                           <!--href ="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/unstable/" >Unstable</a>-->
+                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#popupModal{{binary.id}}">Unstable</button>
 
                         <!-- Modal -->
-                        <div id="myModal" class="modal fade" role="dialog">
+                        <div id="popupModal{{binary.id}}" class="modal fade" role="dialog">
                             <div class="modal-dialog">
 
                             <!-- Modal content-->

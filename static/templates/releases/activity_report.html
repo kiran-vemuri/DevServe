@@ -3,8 +3,8 @@
 {% block title %} Binary Upload {% endblock %}
 
 {% block restbody %}
-    {% for binary in binary_list %}
-        <p>{{binary.status_change_date}}</p>
+    {% for event in event_list %}
+        <p>{{event.event_date}}: {{event.event_log}}</p>
     {% endfor %}
 
 {% endblock %}
