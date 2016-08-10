@@ -23,6 +23,7 @@ class Component(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     name = models.CharField(max_length=200,blank=False, unique=True)
     create_date = models.DateTimeField(auto_now_add=True)
+    component_owner = models.CharField(max_length=200, blank=False, default="No Owner Specified")
 
     def __str__(self):
         return self.name
@@ -45,3 +46,14 @@ class Binary(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@python_2_unicode_compatible
+class EventLog(models.Model):
+    id = models.AutoField(primary_key=True)
+    binary = models.ForeignKey(Binary, on_delete=models.CASCADE, null=True)
+    event_date = models.DateTimeField(auto_now_add=True)
+    event_log = models.TextField(default="No event log")
+
+    def __str__(self):
+        return self.event_log
