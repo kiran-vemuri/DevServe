@@ -126,8 +126,8 @@ def binary_upload(request):
                                                           md5sum=md5_cal(binary_path))
                     print binary_object.id
                     event_log = "Developer_Notes: {}".format(binary_object.notes)
-                    event_object = EventLog.objects.create(binary=binary_object.id,
-                                                           component=component_obj.id,
+                    event_object = EventLog.objects.create(binary=binary_object,
+                                                           component=component_obj,
                                                            status_change="upload",
                                                            event_log=event_log)
                     print "New event: {}".format(event_object.event_log)
@@ -171,7 +171,7 @@ def binary_status_change(request, product_id, component_id, binary_id, new_statu
             event_log = "Change_Notes: '{}' and Bug: '{}'".format(binary_object.change_notes,
                                                                   binary_object.bug_url)
         event_object = EventLog.objects.create(binary=binary_object,
-                                               component=component_obj.id,
+                                               component=component_obj,
                                                status_change=binary_object.status,
                                                event_log=event_log)
         print "New event: {}".format(event_object.event_log)
@@ -270,8 +270,8 @@ class BinaryViewSet(viewsets.ModelViewSet):
                                                   notes=notes,
                                                   md5sum=md5_cal(binary_path))
             event_log = "Developer_Notes: {}".format(binary_object.notes)
-            event_object = EventLog.objects.create(binary=binary_object.id,
-                                                   component=component_obj.id,
+            event_object = EventLog.objects.create(binary=binary_object,
+                                                   component=component_obj,
                                                    status_change="upload",
                                                    event_log=event_log)
             print "New event: {}".format(event_object.event_log)
