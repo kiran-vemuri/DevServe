@@ -127,7 +127,7 @@ def binary_upload(request):
                     print binary_object.id
                     event_log = "Developer_Notes: {}".format(binary_object.notes)
                     event_object = EventLog.objects.create(binary=binary_object,
-                                                           component=component_obj,
+                                                           component_name=component_obj.name,
                                                            status_change="upload",
                                                            event_log=event_log)
                     print "New event: {}".format(event_object.event_log)
@@ -171,10 +171,18 @@ def binary_status_change(request, product_id, component_id, binary_id, new_statu
             event_log = "Change_Notes: '{}' and Bug: '{}'".format(binary_object.change_notes,
                                                                   binary_object.bug_url)
         event_object = EventLog.objects.create(binary=binary_object,
-                                               component=component_obj,
+                                               component_name=component_obj.name,
                                                status_change=binary_object.status,
                                                event_log=event_log)
         print "New event: {}".format(event_object.event_log)
+    else:
+        binary_object.status = new_status
+        binary_object.save()
+        event_object = EventLog.objects.create(binary=binary_object,
+                                               component_name=component_obj.name,
+                                               status_change=binary_object.status,
+                                               event_log='')
+        print "New event: stable/production"
     return HttpResponseRedirect(redirect_url)
 
 
@@ -189,7 +197,60 @@ def activity_report(request):
         'component_list': component_list,
     }
     print EventLog.objects.datetimes('event_date', 'day', order="DESC")
+    print "month"
+    print EventLog.objects.datetimes('event_date', 'month', order="DESC")
     print EventLog.objects.filter(event_date__date=datetime.date(2016, 8, 10))
+    print "mnth---->"
+    mnth_list = EventLog.objects.filter(event_date__month=8)
+    print mnth_list.filter(event_date__date=datetime.date(2016, 8, 10))
+    return render(request, 'releases/activity_report.html', context)
+
+
+def activity_report_month(request, a_year, a_month):
+    # binary_list = Binary.objects.filter(event_date__month=a_month,
+    #                                     event_date__year=a_year)
+    # binary_list = binary_list.order_by('-status_change_date')
+    component_list = Binary.objects.all()
+    # event_list = EventLog.objects.all().order_by('-event_date')
+    event_list = EventLog.objects.filter(event_date__month=a_month,
+                                         event_date__year=a_year)
+    event_list = event_list.order_by('-event_date')
+    event_date_list = EventLog.objects.datetimes('event_date', 'day', order="DESC")
+    context = {
+        'event_list': event_list,
+        'event_date_list': event_date_list,
+        'component_list': component_list,
+    }
+    return render(request, 'releases/activity_report.html', context)
+
+
+def activity_report_date(request, a_year, a_month, a_day):
+    # binary_list = Binary.objects.all().order_by('-status_change_date')
+    component_list = Component.objects.all()
+    event_list = EventLog.objects.filter(event_date__day=a_day,
+                                         event_date__month=a_month,
+                                         event_date__year=a_year)
+    event_list = event_list.order_by('-event_date')
+    event_date_list = EventLog.objects.datetimes('event_date', 'day', order="DESC")
+
+    upload_count_list = []
+    for component in component_list:
+        upload_count_list.append((component.name, len(Binary.objects.filter(upload_date__day=a_day,
+                                                                            upload_date__month=a_month,
+                                                                            upload_date__year=a_year).filter(component=component))))
+    modify_count_list = []
+    for component in component_list:
+        modify_count_list.append((component.name, len(Binary.objects.filter(status_change_date__day=a_day,
+                                                                            status_change_date__month=a_month,
+                                                                            status_change_date__year=a_year).filter(
+            component=component))))
+    context = {
+        'event_list': event_list,
+        'event_date_list': event_date_list,
+        'component_list': component_list,
+        'upload_count_list': upload_count_list,
+        'modify_count_list': modify_count_list
+    }
     return render(request, 'releases/activity_report.html', context)
 
 
@@ -273,7 +334,7 @@ class BinaryViewSet(viewsets.ModelViewSet):
                                                   md5sum=md5_cal(binary_path))
             event_log = "Developer_Notes: {}".format(binary_object.notes)
             event_object = EventLog.objects.create(binary=binary_object,
-                                                   component=component_obj,
+                                                   component_name=component_obj.name,
                                                    status_change="upload",
                                                    event_log=event_log)
             print "New event: {}".format(event_object.event_log)
