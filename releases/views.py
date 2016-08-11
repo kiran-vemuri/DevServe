@@ -210,16 +210,28 @@ def activity_report_month(request, a_year, a_month):
     # binary_list = Binary.objects.filter(event_date__month=a_month,
     #                                     event_date__year=a_year)
     # binary_list = binary_list.order_by('-status_change_date')
-    component_list = Binary.objects.all()
+    component_list = Component.objects.all()
     # event_list = EventLog.objects.all().order_by('-event_date')
     event_list = EventLog.objects.filter(event_date__month=a_month,
                                          event_date__year=a_year)
     event_list = event_list.order_by('-event_date')
     event_date_list = EventLog.objects.datetimes('event_date', 'day', order="DESC")
+
+    upload_count_list = []
+    for component in component_list:
+        upload_count_list.append((component.name, len(Binary.objects.filter(upload_date__month=a_month,
+                                                                            upload_date__year=a_year).filter(
+            component=component))))
+    modify_count_list = []
+    for component in component_list:
+        modify_count_list.append((component.name, len(Binary.objects.filter(status_change_date__month=a_month,
+                                                                            status_change_date__year=a_year).filter(component=component))))
     context = {
         'event_list': event_list,
         'event_date_list': event_date_list,
         'component_list': component_list,
+        'upload_count_list': upload_count_list,
+        'modify_count_list': modify_count_list
     }
     return render(request, 'releases/activity_report.html', context)
 
@@ -242,8 +254,7 @@ def activity_report_date(request, a_year, a_month, a_day):
     for component in component_list:
         modify_count_list.append((component.name, len(Binary.objects.filter(status_change_date__day=a_day,
                                                                             status_change_date__month=a_month,
-                                                                            status_change_date__year=a_year).filter(
-            component=component))))
+                                                                            status_change_date__year=a_year).filter(component=component))))
     context = {
         'event_list': event_list,
         'event_date_list': event_date_list,
