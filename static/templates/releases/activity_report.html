@@ -6,38 +6,97 @@
     <!--{% for event_date in event_date_list %}-->
         <!--<a href="{{event_date.year}}/{{event_date.month}}/{{event_date.day}}">{{ event_date.date}}</a>-->
     <!--{% endfor %}-->
+
     <table class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
-            <th>Component</th>
-            <th>Upload Count</th>
+            <th>Statistics</th>
         </thead>
         <tbody>
-            {% for component,count in upload_count_list %}
-                {% if count != 0 %}
-                    <tr>
-                        <td>{{component}}</td>
-                        <td>{{count}}</td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#UploadStatsModal">Upload Statistics</button>
+                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#ModifyStatsModal">Modify Statistics</button>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
         </tbody>
     </table>
-    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
-        <thead>
-            <th>Component</th>
-            <th>Modify Count</th>
-        </thead>
-        <tbody>
-            {% for component,count in modify_count_list %}
-                {% if count != 0 %}
-                    <tr>
+
+    <!-- Upload Stats Modal -->
+    <div id="UploadStatsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+        <!-- Upload Stats Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Upload Statistics</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                        <th>Component</th>
+                        <th>Upload Count</th>
+                        </thead>
+                        <tbody>
+                        {% for component,count in upload_count_list %}
+                        {% if count != 0 %}
+                        <tr>
                         <td>{{component}}</td>
                         <td>{{count}}</td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<!-- Modify Stats Modal -->
+    <div id="ModifyStatsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+        <!-- Modify Stats Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modify Statistics</h4>
+                </div>
+                <div class="modal-body">
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                            <th>Component</th>
+                            <th>Modify Count</th>
+                        </thead>
+                        <tbody>
+                            {% for component,count in modify_count_list %}
+                                {% if count != 0 %}
+                                    <tr>
+                                        <td>{{component}}</td>
+                                        <td>{{count}}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
 
     <table class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>

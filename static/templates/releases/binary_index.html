@@ -41,7 +41,15 @@
                     <td><s class="binary_unstable">{{ binary.name }}</s></td>
                 {% endif %}
                 <td>{{ binary.upload_date }}</td>
-                <td><a href="#" rel="tooltip" title="{{ binary.status_change_date}}">{{ binary.status}}</a></td>
+                <td>
+                    {% if binary.status == 'stable' or binary.status == 'production' %}
+                        <a href="#" class='bg-success' rel="tooltip" title="{{binary.status_change_date}}"><b>&nbsp;{{binary.status}}&nbsp;</b></a>
+                    {% elif binary.status == 'unstable' %}
+                        <a href="#" class='bg-danger' rel="tooltip" title="{{binary.status_change_date}}"><b>&nbsp;{{binary.status}}&nbsp;</b></a>
+                    {% else %}
+                        <a href="#" class='bg-info' rel="tooltip" title="{{binary.status_change_date}}"><b>&nbsp;{{binary.status}}&nbsp;</b></a>
+                    {% endif %}
+                </td>
                 <td>
                     <!--<a href="#"-->
                        <!--class="glyphicon glyphicon-info-sign"-->
@@ -99,59 +107,56 @@
 
                 </td>
                 <td>
-                    {% if binary.status != 'unstable' %}
-                        <a class="btn btn-primary btn-xs" onclick="return (status_change())"
-                       href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/stable/" >Stable</a>
-                        <a class="btn btn-success btn-xs" onclick="return (status_change())"
-                           href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/production/" >Production</a>
-                        <!--<a class="btn btn-danger btn-xs" onclick="return (status_change())"-->
-                           <!--href ="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/unstable/" >Unstable</a>-->
-                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#popupModal{{binary.id}}">Unstable</button>
 
-                        <!-- Unstable Modal -->
-                        <div id="popupModal{{binary.id}}" class="modal fade" role="dialog">
-                            <div class="modal-dialog">
+                    <a class="btn btn-primary btn-xs" onclick="return (status_change())"
+                   href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/stable/" >Stable</a>
+                    <a class="btn btn-success btn-xs" onclick="return (status_change())"
+                       href="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/production/" >Production</a>
+                    <!--<a class="btn btn-danger btn-xs" onclick="return (status_change())"-->
+                       <!--href ="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/unstable/" >Unstable</a>-->
+                    <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#popupModal{{binary.id}}">Unstable</button>
 
-                            <!-- Unstable Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Unstable Binary</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form method="post"
-                                              action="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/unstable/"
-                                              class="form-horizontal" role="form">
-                                            {% csrf_token %}
-                                            <div class="form-group">
-                                                <label class="control-label col-sm-2">Notes:</label>
-                                                <div class="col-sm-10">
-                                                    <textarea id="notes" name="change_notes" class="form-control" placeholder="Enter notes" maxlength="1990"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-sm-2" >Bug:</label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" name="bug_url" class="form-control" id="bug" placeholder="Bug url">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-offset-2 col-sm-10">
-                                                    <button type="submit" class="btn btn-default">Submit</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
+                    <!-- Unstable Modal -->
+                    <div id="popupModal{{binary.id}}" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                        <!-- Unstable Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Unstable Binary</h4>
                                 </div>
-
+                                <div class="modal-body">
+                                    <form method="post"
+                                          action="{% url 'product_index' %}binary_status/{{ product_object.id }}/{{ component_object.id }}/{{binary.id}}/unstable/"
+                                          class="form-horizontal" role="form">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2">Notes:</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="notes" name="change_notes" class="form-control" placeholder="Enter notes" maxlength="1990"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" >Bug:</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" name="bug_url" class="form-control" id="bug" placeholder="Bug url">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" class="btn btn-default">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
+
                         </div>
-                    {% else %}
-                        <b class="binary_unstable">No actions available</b>
-                    {% endif %}
+                    </div>
                 </td>
             </tr>
         {% endfor %}

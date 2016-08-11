@@ -188,21 +188,29 @@ def binary_status_change(request, product_id, component_id, binary_id, new_statu
 
 def activity_report(request):
     binary_list = Binary.objects.all().order_by('-status_change_date')
-    component_list = Binary.objects.all()
+    component_list = Component.objects.all()
     event_list = EventLog.objects.all().order_by('-event_date')
     event_date_list = EventLog.objects.datetimes('event_date', 'day', order="DESC")
+    upload_count_list = []
+    for component in component_list:
+        upload_count_list.append((component.name, len(Binary.objects.filter(component=component))))
+    modify_count_list = []
+    for component in component_list:
+        modify_count_list.append((component.name, len(Binary.objects.filter(component=component))))
     context = {
         'event_list': event_list,
         'event_date_list': event_date_list,
         'component_list': component_list,
+        'upload_count_list': upload_count_list,
+        'modify_count_list': modify_count_list
     }
-    print EventLog.objects.datetimes('event_date', 'day', order="DESC")
-    print "month"
-    print EventLog.objects.datetimes('event_date', 'month', order="DESC")
-    print EventLog.objects.filter(event_date__date=datetime.date(2016, 8, 10))
-    print "mnth---->"
-    mnth_list = EventLog.objects.filter(event_date__month=8)
-    print mnth_list.filter(event_date__date=datetime.date(2016, 8, 10))
+    # print EventLog.objects.datetimes('event_date', 'day', order="DESC")
+    # print "month"
+    # print EventLog.objects.datetimes('event_date', 'month', order="DESC")
+    # print EventLog.objects.filter(event_date__date=datetime.date(2016, 8, 10))
+    # print "mnth---->"
+    # mnth_list = EventLog.objects.filter(event_date__month=8)
+    # print mnth_list.filter(event_date__date=datetime.date(2016, 8, 10))
     return render(request, 'releases/activity_report.html', context)
 
 
